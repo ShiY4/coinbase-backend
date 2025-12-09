@@ -1,0 +1,23 @@
+{
+  "name": "my-backend",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev"
+  },
+  "dependencies": {
+    "express": "latest",
+    "@prisma/client": "latest"
+  },
+  "devDependencies": {
+    "tsx": "latest",
+    "typescript": "latest",
+    "prisma": "latest",
+    "@types/express": "latest",
+    "@types/node": "latest"
+  }
+}
