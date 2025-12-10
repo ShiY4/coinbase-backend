@@ -19,6 +19,6 @@
 2) Генерация файлов для работы Prisma 
     > ```npx prisma generate```
 3) Миграция схем Prisma в вашу БД 
-    > ```npx prisma migrate```
+    > ```npx prisma migrate dev```
 4) Запуск проекта
     > ```npm run dev```
