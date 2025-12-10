@@ -10,14 +10,16 @@
     "prisma:migrate": "prisma migrate dev"
   },
   "dependencies": {
-    "express": "latest",
-    "@prisma/client": "latest"
+    "@prisma/adapter-pg": "^7.1.0",
+    "dotenv": "^17.2.3",
+    "express": "latest"
   },
   "devDependencies": {
-    "tsx": "latest",
-    "typescript": "latest",
-    "prisma": "latest",
+    "@prisma/client": "^7.1.0",
     "@types/express": "latest",
-    "@types/node": "latest"
+    "@types/node": "latest",
+    "prisma": "^7.1.0",
+    "tsx": "latest",
+    "typescript": "latest"
   }
 }

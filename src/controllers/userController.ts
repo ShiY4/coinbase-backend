@@ -4,7 +4,7 @@ import { Prisma } from "@generated/client";
 
 export const getUsers = async (_req: Request, res: Response) => {
   const users = await prisma.user.findMany();
-  res.json(users);
+  res.status(200).json(users);
 };
 
 export const createUser = async (req: Request, res: Response) => {
