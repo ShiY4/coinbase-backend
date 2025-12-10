@@ -4,6 +4,6 @@ import userRoutes from "@/routes/userRoutes";
 const app = express();
 
 app.use(express.json());
-app.use("/users", userRoutes);
+app.use("/user", userRoutes);
 
 export default app;
