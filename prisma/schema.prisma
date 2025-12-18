@@ -9,11 +9,32 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  uid        Int      @id @default(autoincrement())
   firstName String
   lastName  String
   email     String   @unique
   password  String
   createdAt DateTime @default(now())
   refreshToken String?
+  tokens UserToken[]
+}
+
+model Token {
+  tokenId Int @id @default(autoincrement())
+  name String
+  tokenAbbreviation String @unique
+  UserTokens UserToken[]
+}
+
+model UserToken {
+  tokenId Int
+  amount Float
+  buyPrice Decimal
+  memberId Int
+  createdAt DateTime @default(now())
+
+  member User @relation(fields: [memberId], references: [uid])
+  token Token @relation(fields: [tokenId], references: [tokenId])
+
+  @@unique([memberId, tokenId])
 }
