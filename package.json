@@ -11,12 +11,16 @@
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.1.0",
+    "bcrypt": "^6.0.0",
     "dotenv": "^17.2.3",
-    "express": "latest"
+    "express": "latest",
+    "jsonwebtoken": "^9.0.3"
   },
   "devDependencies": {
     "@prisma/client": "^7.1.0",
+    "@types/bcrypt": "^6.0.0",
     "@types/express": "latest",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "latest",
     "prisma": "^7.1.0",
     "tsx": "latest",

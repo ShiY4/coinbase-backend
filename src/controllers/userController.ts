@@ -1,25 +1,51 @@
+import "dotenv/config";
+
 import { Request, Response } from "express";
+
 import { prisma } from "@/db/prisma";
 import { Prisma } from "@generated/client";
 
-export const getUsers = async (_req: Request, res: Response) => {
-  const users = await prisma.user.findMany();
-  res.status(200).json(users);
-};
+import bcrypt from "bcrypt";
 
-export const createUser = async (req: Request, res: Response) => {
+if (!process.env.JWT_SECRET || !process.env.JWT_REFRESH_SECRET) {
+  throw new Error(
+    "JWT_SECRET and JWT_REFRESH_SECRETis not defined in environment variables"
+  );
+}
+
+export async function registration(req: Request, res: Response) {
   const { firstName, lastName, email, password } = req.body;
 
   try {
-    const user = await prisma.user.create({
-      data: { firstName, lastName, email, password },
+    const userExists = await prisma.user.findUnique({
+      where: {
+        email: email,
+      },
     });
-    res.status(201).json(user);
-  } catch (err) {
-    if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === "P2002") {
-      return res.status(400).json({ error: "User with this email already exists" });
+
+    if (userExists) {
+      return res.status(400).json("User already exists");
+    } else {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      await prisma.user.create({
+        data: { firstName, lastName, email, password: hashedPassword },
+      });
+
+      return res.status(201).json({ email, firstName, lastName });
     }
-    console.error(err);
-    res.status(500).json({ error: "Failed to create user" });
+  } catch (error) {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2002"
+    ) {
+      return res.status(400).json({
+        prismaErrorCode: error.code,
+        error: "User with this email already exists",
+      });
+    }
+    console.error(error);
+    return res.status(500).json({ error: "Failed to create user" });
   }
-};
+}
+
+
