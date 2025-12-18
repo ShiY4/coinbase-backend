@@ -34,15 +34,15 @@ export async function login(req: Request, res: Response) {
       return res.status(400).json("Invalid credentials");
     }
 
-    const accessToken = jwt.sign({ userId: user.id }, JWT_SECRET, {
+    const accessToken = jwt.sign({ userId: user.uid }, JWT_SECRET, {
       expiresIn: "15min",
     });
-    const refreshToken = jwt.sign({ userId: user.id }, JWT_REFRESH_SECRET, {
+    const refreshToken = jwt.sign({ userId: user.uid }, JWT_REFRESH_SECRET, {
       expiresIn: "7d",
     });
 
     await prisma.user.update({
-      where: { id: user.id },
+      where: { uid: user.uid },
       data: { refreshToken },
     });
 
@@ -74,23 +74,23 @@ export async function refresh(req: Request, res: Response) {
       userId: number;
     };
     const user = await prisma.user.findUnique({
-      where: { id: tokenPayload.userId },
+      where: { uid: tokenPayload.userId },
     });
 
     if (!user || user.refreshToken !== refreshToken) {
       return res.status(403).json("Invalid refresh token");
     }
 
-    const newAccessToken = jwt.sign({ userId: user.id }, JWT_SECRET, {
+    const newAccessToken = jwt.sign({ userId: user.uid }, JWT_SECRET, {
       expiresIn: "15m",
     });
 
-    const newRefreshToken = jwt.sign({ userId: user.id }, JWT_REFRESH_SECRET, {
+    const newRefreshToken = jwt.sign({ userId: user.uid }, JWT_REFRESH_SECRET, {
       expiresIn: "7d",
     });
 
     await prisma.user.update({
-      where: { id: user.id },
+      where: { uid: user.uid },
       data: { refreshToken: newRefreshToken },
     });
 
