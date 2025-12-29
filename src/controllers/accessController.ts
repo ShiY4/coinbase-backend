@@ -46,9 +46,17 @@ export async function login(req: Request, res: Response) {
       data: { refreshToken },
     });
 
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+      path: "/auth/refresh",
+    });
+
     return res
       .status(200)
-      .json({ message: "User has been loggined", accessToken, refreshToken });
+      .json({ message: "User has been loggined", accessToken });
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       return res.status(500).json({
@@ -94,9 +102,16 @@ export async function refresh(req: Request, res: Response) {
       data: { refreshToken: newRefreshToken },
     });
 
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+      path: "/auth/refresh",
+    });
+
     return res.status(200).json({
       accessToken: newAccessToken,
-      refreshToken: newRefreshToken,
       message: "Token's will be refreshed",
     });
   } catch (error) {
